@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.Scanner;
 import java.net.*;
+import java.nio.file.*;
 
 public class ReceiveF
 {
@@ -16,8 +17,10 @@ public class ReceiveF
          Scanner in = new Scanner(System.in);
          System.out.println("Enter filename: ");
          String name = in.next();
+         
+         Path path = FileSystems.getDefault().getPath(".", name);
       
-         int i = 1;
+/*         int i = 1;
          File file = new File(name);
          while(true)
          {
@@ -39,10 +42,23 @@ public class ReceiveF
          byte[] arr = new byte[l];
          
          int bytesRead = is.read(arr, 0, arr.length);
-         bout.write(arr, 0, bytesRead);
+         bout.write(arr, 0, bytesRead);*/
+         
+         DataInputStream din=new DataInputStream(s.getInputStream());
+         
+         int len = din.readInt();
+         
+         InputStream is = s.getInputStream();
 
-         bout.flush();
-         bout.close();
+         byte[] file = new byte[len];        
+         int bytesRead = is.read(file, 0, file.length);
+         
+         Files.write(path, file);
+         
+         System.out.println("Received!");
+
+//         bout.flush();
+//         bout.close();
          s.close();
       }
       catch(Exception e)
